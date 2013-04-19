@@ -1,0 +1,28 @@
+CREATE TABLE captures (frametimerelative DOUBLE,ipsrc STRING,ipdst STRING,ipproto STRING,iplen STRING,framelen DOUBLE,tcpport STRING,udpport STRING,tcpflagspush STRING,tcpflagsurg STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY '|' LINES TERMINATED BY '\n' STORED AS TEXTFILE;
+
+
+
+select max(framelen),sum(framelen),
+avg(frametimerelative),variance(frametimerelative),avg(framelen),
+variance(framelen)
+from captures group by ipsrc,ipdst,tcpport,udpport
+
+
+col names are max(framelen),sum(framelen),
+avg(frametimerelative),variance(frametimerelative),avg(framelen),
+variance(framelen) and
+ratio of avg(framelen) and  max(framelen)
+
+
+
+old not reqd :- 
+
+select max(framelen),collect_set(framelen),sum(framelen),
+avg(frametimerelative),variance(frametimerelative),avg(framelen),
+variance(framelen)
+from captures group by ipsrc,ipdst,tcpport,udpport
+
+
+select collect_set(framelen),max(framelen) from captures group by ipsrc,ipdst,tcpport,udpport
+
+

@@ -30,7 +30,7 @@ print "Enter the CAPTURE filter eg tcp port 23 and not [src/dst] host www.google
 
 my $filter=<>;
 
-my @colnames=qw/\t frame.time ip.src ip.dst ip.proto ip.len ip.flags ip.id tcp.flags ip.ttl udp.dstport udp.srcport udp.port /;
+my @colnames=qw/\t frame.time_relative ip.src ip.dst ip.proto ip.len frame.len tcp.port udp.port tcp.flags.push tcp.flags.urg ip.flags ip.id tcp.flags ip.ttl udp.dstport udp.srcport udp.port /;
 
 print "The possible columns or DISPLAY FILTERS(remeber these colnames are equi to your display filters) are ...   ";
 foreach (@colnames)
@@ -106,9 +106,9 @@ system($tshark_command);
 #system($HADOOP_HOME/bin/hadoop dfs -mkdir input);
 
 #system($HADOOP_HOME/bin/hadoop dfs -copyFromLocal ~/project/captures/capture input);
-print "the command of tshark was ..";
+print "the command of tshark was ..\n";
 print $tshark_command;
-print "We are now ready to start hive...\n ";
+print "\nWe are now ready to start hive...\n ";
 print "The commands you need to execute on Hive CLI are a follows ..... \n";
 
 
@@ -131,10 +131,10 @@ print "\n The above command was in case you need to add data to same table else 
 
 print "\n";
 
-my $loadcmd = "cp ./dump".$num_run." \$HIVE_HOME";
-
+#my $loadcmd = "cp ./dump".$num_run." \$HIVE_HOME";
+my $loadcmd = "hadoop fs -copyFromLocal dump".$num_run." ." ;
 system($loadcmd);
-print "\n\nLOAD DATA LOCAL INPATH \'"."./dump".$num_run."\' INTO TABLE captures\n\n";
+print "\n\nLOAD DATA LOCAL INPATH \'"."/user/project/dump".$num_run."\' INTO TABLE captures\n\n";
 
 print  "\nNow Starting Hive .....";
 #system($HIVE_HOME/bin/hive);
