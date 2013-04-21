@@ -62,20 +62,22 @@ my @input_filter_names = @colnames[@colnumbers];
 #}
 
 ### this is just for a run check ####
+#system("rm runs.txt");
+system("hadoop fs -get runs.txt");
 open (MYFILE, "+<runs.txt");
 
 my $num_run = <MYFILE>;
 close(MYFILE);
 $num_run ++;
 
-system("rm runs.txt");
+system("rm runs.txt");system("hadoop fs -rm runs.txt");
 system("touch runs.txt");
 
 open (MYFILE1, ">>runs.txt");
 print MYFILE1 $num_run;
 
 close(MYFILE1);
-
+system("hadoop fs -copyFromLocal runs.txt .");
 ### run chk over#####
 
 my $input_filter1 = join " -e ",@input_filter_names;
@@ -109,7 +111,7 @@ system($tshark_command);
 print "the command of tshark was ..\n";
 print $tshark_command;
 print "\nWe are now ready to start hive...\n ";
-print "The commands you need to execute on Hive CLI are a follows ..... \n";
+print "\nThe commands you need to execute on Hive CLI are a follows ..... \n";
 
 
 #print  "CREATE TABLE captures (Time STRING, Source STRING, Destination STRING, Protocol STRING, Length STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' LINES TERMINATED BY '\\n' STORED AS TEXTFILE;";
